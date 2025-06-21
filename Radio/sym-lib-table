@@ -2,5 +2,5 @@
   (version 7)
   (lib (name "Radio-eagle-import")(type "KiCad")(uri "${KIPRJMOD}/Radio-eagle-import.kicad_sym")(options "")(descr ""))
   (lib (name "OLED Pinout")(type "KiCad")(uri "${KIPRJMOD}/OLED Pinout.kicad_sym")(options "")(descr ""))
-  (lib (name "ECE")(type "KiCad")(uri "D:/Downloads/ECE Kicad Libraries/ECE Kicad Libraries/ECE.kicad_sym")(options "")(descr ""))
+  (lib (name "ECE")(type "KiCad")(uri "C:/Users/Karl/Documents/University/Summer 2025/ECE 299/Project/ECE-299-Radio/ECE Kicad Libraries/ECE.kicad_sym")(options "")(descr ""))
 )

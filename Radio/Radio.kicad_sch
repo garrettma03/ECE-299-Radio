@@ -3428,16 +3428,8 @@
 		(uuid "f21ddf00-330a-4bff-9854-0f7b6948d378")
 	)
 	(no_connect
-		(at 35.56 87.63)
-		(uuid "0f939d16-1601-4b44-83a6-131ce9696a4c")
-	)
-	(no_connect
 		(at 81.28 74.93)
 		(uuid "1432cb12-939e-4144-8377-b93af8378029")
-	)
-	(no_connect
-		(at 35.56 85.09)
-		(uuid "16a8d74b-1d7c-44a5-8ddd-2660ab4cd913")
 	)
 	(no_connect
 		(at 81.28 90.17)
@@ -3456,6 +3448,10 @@
 		(uuid "48f4c69c-3521-4fd1-bd8a-b17cdc401e19")
 	)
 	(no_connect
+		(at 35.56 67.31)
+		(uuid "582b7255-260d-4d50-9dbf-d154dd4ac074")
+	)
+	(no_connect
 		(at 33.02 160.02)
 		(uuid "773e6b69-2dfc-4c30-84fd-4dc709cd3d75")
 	)
@@ -3472,16 +3468,16 @@
 		(uuid "9cf357bb-781b-4858-8228-5638e55969c7")
 	)
 	(no_connect
+		(at 35.56 64.77)
+		(uuid "a0756a57-1c98-423b-990e-ce2ea5896cdb")
+	)
+	(no_connect
 		(at 35.56 46.99)
 		(uuid "b1603c35-6f4f-442a-b1aa-cf72a719310b")
 	)
 	(no_connect
 		(at 35.56 74.93)
 		(uuid "b31bcb58-3888-424d-95d2-e943ce1f2cb4")
-	)
-	(no_connect
-		(at 35.56 90.17)
-		(uuid "b810a163-8d68-4633-b94a-a3c8c2fc5be9")
 	)
 	(no_connect
 		(at 81.28 85.09)
@@ -3502,6 +3498,10 @@
 	(no_connect
 		(at 81.28 69.85)
 		(uuid "ef0144fd-75bd-4eb3-8355-69caec920b49")
+	)
+	(no_connect
+		(at 35.56 62.23)
+		(uuid "f16f2aaa-06d1-47f6-be09-f4df023a9356")
 	)
 	(no_connect
 		(at 81.28 59.69)
@@ -3549,6 +3549,16 @@
 	)
 	(wire
 		(pts
+			(xy 35.56 85.09) (xy 17.78 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "06865f99-ed10-4254-830f-b88407f29ae9")
+	)
+	(wire
+		(pts
 			(xy 212.09 85.09) (xy 209.55 85.09)
 		)
 		(stroke
@@ -3556,16 +3566,6 @@
 			(type default)
 		)
 		(uuid "0845f97a-774c-416a-8ba7-515c7ca60867")
-	)
-	(wire
-		(pts
-			(xy 21.59 67.31) (xy 35.56 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0893ac83-b974-4aa0-bd29-aa5a0311f7c7")
 	)
 	(wire
 		(pts
@@ -3629,6 +3629,16 @@
 	)
 	(wire
 		(pts
+			(xy 33.02 87.63) (xy 35.56 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "13fdee4f-62f1-40b5-b3d1-89730b8751ac")
+	)
+	(wire
+		(pts
 			(xy 187.96 27.94) (xy 187.96 101.6)
 		)
 		(stroke
@@ -3649,16 +3659,6 @@
 	)
 	(wire
 		(pts
-			(xy 144.78 87.63) (xy 144.78 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1796ac67-d411-4e9c-918c-b8da81178df8")
-	)
-	(wire
-		(pts
 			(xy 118.11 35.56) (xy 101.6 35.56)
 		)
 		(stroke
@@ -3676,6 +3676,16 @@
 			(type default)
 		)
 		(uuid "1cd36459-22d8-4293-b516-1aa0086719a2")
+	)
+	(wire
+		(pts
+			(xy 20.32 90.17) (xy 25.4 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d57232e-861a-4f84-902d-b426b2285411")
 	)
 	(wire
 		(pts
@@ -3909,16 +3919,6 @@
 	)
 	(wire
 		(pts
-			(xy 19.05 146.05) (xy 19.05 62.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "451b028d-e357-424f-903e-e74d1fce242b")
-	)
-	(wire
-		(pts
 			(xy 39.37 133.35) (xy 77.47 133.35)
 		)
 		(stroke
@@ -3939,13 +3939,13 @@
 	)
 	(wire
 		(pts
-			(xy 20.32 64.77) (xy 27.94 64.77)
+			(xy 154.94 87.63) (xy 154.94 82.55)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "484203fa-3a05-4b5e-ba88-c4705aa01187")
+		(uuid "4a0edb33-8a35-4520-aecb-0e26477425a7")
 	)
 	(wire
 		(pts
@@ -3976,16 +3976,6 @@
 			(type default)
 		)
 		(uuid "511db684-18a3-4012-ba98-d2971770438c")
-	)
-	(wire
-		(pts
-			(xy 144.78 90.17) (xy 154.94 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "51a8598f-64ce-41b0-b827-e828dab3653c")
 	)
 	(wire
 		(pts
@@ -4026,6 +4016,16 @@
 			(type default)
 		)
 		(uuid "5dd0b3bd-ec29-4c20-8ffd-a172aeaebb94")
+	)
+	(wire
+		(pts
+			(xy 21.59 59.69) (xy 35.56 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f1cba3e-4ac9-4bff-8c9b-c876f6ef9890")
 	)
 	(wire
 		(pts
@@ -4139,16 +4139,6 @@
 	)
 	(wire
 		(pts
-			(xy 17.78 59.69) (xy 35.56 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7f145ef9-a442-42ed-b830-f4a166aa3162")
-	)
-	(wire
-		(pts
 			(xy 83.82 41.91) (xy 127 41.91)
 		)
 		(stroke
@@ -4159,23 +4149,13 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 87.63) (xy 144.78 87.63)
+			(xy 133.35 87.63) (xy 147.32 87.63)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "800c1b84-c0a3-4dbb-a33a-db8a5749358a")
-	)
-	(wire
-		(pts
-			(xy 19.05 62.23) (xy 27.94 62.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "820ee06f-f2ae-46f6-9a15-33db6d3fabe5")
 	)
 	(wire
 		(pts
@@ -4369,6 +4349,16 @@
 	)
 	(wire
 		(pts
+			(xy 17.78 85.09) (xy 17.78 148.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e87cdfa-3b1c-4594-b42e-c516b297a756")
+	)
+	(wire
+		(pts
 			(xy 60.96 173.99) (xy 60.96 142.24)
 		)
 		(stroke
@@ -4376,6 +4366,16 @@
 			(type default)
 		)
 		(uuid "9f30dbc3-73e9-4f30-9285-3b1125df1249")
+	)
+	(wire
+		(pts
+			(xy 21.59 113.03) (xy 21.59 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f49d1f1-8c1b-4479-a59f-118b2515ee2a")
 	)
 	(wire
 		(pts
@@ -4406,6 +4406,16 @@
 			(type default)
 		)
 		(uuid "a3b6fca8-57b2-4c30-8da3-c2346170b5a5")
+	)
+	(wire
+		(pts
+			(xy 19.05 87.63) (xy 25.4 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5664990-f8be-4a3e-8d02-a59b6bd8aff8")
 	)
 	(wire
 		(pts
@@ -4536,26 +4546,6 @@
 			(type default)
 		)
 		(uuid "b5b7747b-11f1-4503-ad43-4e379f03e1b1")
-	)
-	(wire
-		(pts
-			(xy 21.59 113.03) (xy 21.59 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bfa1ca4c-ff5b-4cc8-a903-b3827d3c5ac3")
-	)
-	(wire
-		(pts
-			(xy 20.32 64.77) (xy 20.32 144.78)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bfc63f63-d3b6-484e-816e-7bc51e32b784")
 	)
 	(wire
 		(pts
@@ -4699,6 +4689,16 @@
 	)
 	(wire
 		(pts
+			(xy 20.32 144.78) (xy 20.32 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e45917d2-c77e-4922-8315-c2421dccd3c9")
+	)
+	(wire
+		(pts
 			(xy 138.43 58.42) (xy 138.43 92.71)
 		)
 		(stroke
@@ -4716,6 +4716,16 @@
 			(type default)
 		)
 		(uuid "e6039565-e856-4dfe-9359-ceef8458d9e4")
+	)
+	(wire
+		(pts
+			(xy 33.02 90.17) (xy 35.56 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8d6cabf-ae77-4b78-945e-56b63d678247")
 	)
 	(wire
 		(pts
@@ -4769,16 +4779,6 @@
 	)
 	(wire
 		(pts
-			(xy 17.78 148.59) (xy 17.78 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f2de61b6-03f9-4dd8-9e50-b9673e69f0ac")
-	)
-	(wire
-		(pts
 			(xy 154.94 67.31) (xy 179.07 67.31)
 		)
 		(stroke
@@ -4786,6 +4786,16 @@
 			(type default)
 		)
 		(uuid "f3b97031-e12f-415b-9448-42f439b6cb60")
+	)
+	(wire
+		(pts
+			(xy 19.05 146.05) (xy 19.05 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f45ff6e2-40f5-4f85-a81a-7c5bda6787c4")
 	)
 	(wire
 		(pts
@@ -4925,7 +4935,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0cbbdaaa-4ebb-4e36-8c80-b0f9e521bc9b")
-		(property "Reference" "C7"
+		(property "Reference" "C5"
 			(at 191.77 22.6059 0)
 			(effects
 				(font
@@ -4943,7 +4953,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Rect_L4.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm"
 			(at 187.96 24.13 0)
 			(effects
 				(font
@@ -4979,7 +4989,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "C7")
+					(reference "C5")
 					(unit 1)
 				)
 			)
@@ -4994,7 +5004,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0ebd49ae-d171-4e84-bca6-0b884d216321")
-		(property "Reference" "R8"
+		(property "Reference" "R4"
 			(at 151.384 79.756 90)
 			(effects
 				(font
@@ -5012,7 +5022,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 150.876 83.566 90)
 			(effects
 				(font
@@ -5048,7 +5058,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "R8")
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -5056,15 +5066,15 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 31.75 64.77 90)
+		(at 29.21 90.17 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "2000a1f4-51d6-4d40-ba23-e2cec437f6d6")
-		(property "Reference" "R6"
-			(at 51.562 63.754 90)
+		(property "Reference" "R9"
+			(at 49.022 89.154 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5072,15 +5082,15 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 51.562 66.294 90)
+			(at 49.022 91.694 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
-			(at 32.004 63.754 90)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+			(at 29.464 89.154 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5089,7 +5099,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 31.75 64.77 0)
+			(at 29.21 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5098,7 +5108,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 31.75 64.77 0)
+			(at 29.21 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5115,7 +5125,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "R6")
+					(reference "R9")
 					(unit 1)
 				)
 			)
@@ -5131,7 +5141,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2994c004-84a3-49a4-9307-e87ee29456d0")
-		(property "Reference" "C4"
+		(property "Reference" "C3"
 			(at 227.33 72.1359 0)
 			(effects
 				(font
@@ -5149,7 +5159,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Rect_L4.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm"
 			(at 223.52 73.66 0)
 			(effects
 				(font
@@ -5185,7 +5195,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "C4")
+					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -5208,7 +5218,7 @@
 				)
 			)
 		)
-		(property "Value" "Bourns PEC11R"
+		(property "Value" "Rotary Encoder"
 			(at 41.656 146.304 0)
 			(effects
 				(font
@@ -5283,7 +5293,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2f5fa92c-03b0-4017-8afa-6b2369e36c89")
-		(property "Reference" "R7"
+		(property "Reference" "R2"
 			(at 214.63 80.0099 0)
 			(effects
 				(font
@@ -5301,7 +5311,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 211.074 81.026 90)
 			(effects
 				(font
@@ -5337,7 +5347,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "R7")
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -5369,7 +5379,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_DIP:DIP-8_W7.62mm_Socket"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 212.09 67.31 0)
 			(effects
 				(font
@@ -5439,7 +5449,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3fc07f47-0905-4bd9-b107-6f1e8ab3bc98")
-		(property "Reference" "R3"
+		(property "Reference" "R6"
 			(at 31.75 48.26 90)
 			(effects
 				(font
@@ -5455,7 +5465,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 32.004 53.594 90)
 			(effects
 				(font
@@ -5491,7 +5501,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "R3")
+					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -5499,15 +5509,15 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 154.94 86.36 180)
+		(at 151.13 87.63 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "51bce03c-6cde-4060-9cf3-157d6a69393c")
-		(property "Reference" "R9"
-			(at 157.734 86.868 0)
+		(property "Reference" "R5"
+			(at 147.574 90.678 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5516,7 +5526,7 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 157.734 89.408 0)
+			(at 147.574 93.218 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5524,8 +5534,8 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
-			(at 153.924 86.106 90)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+			(at 151.384 86.614 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5534,7 +5544,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 154.94 86.36 0)
+			(at 151.13 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5543,7 +5553,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 154.94 86.36 0)
+			(at 151.13 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5560,7 +5570,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "R9")
+					(reference "R5")
 					(unit 1)
 				)
 			)
@@ -5576,7 +5586,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "52979557-3ece-4f90-8c46-d2e617e6ca6e")
-		(property "Reference" "C3"
+		(property "Reference" "C2"
 			(at 230.124 62.23 90)
 			(effects
 				(font
@@ -5592,7 +5602,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Rect_L4.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 			(at 229.87 69.85 0)
 			(effects
 				(font
@@ -5628,7 +5638,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "C3")
+					(reference "C2")
 					(unit 1)
 				)
 			)
@@ -5662,7 +5672,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Buzzer_Beeper:Speaker_CUI_CMR-1206S-67"
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal"
 			(at 246.38 74.93 0)
 			(effects
 				(font
@@ -5730,7 +5740,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Rect_L4.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 			(at 200.66 52.07 0)
 			(effects
 				(font
@@ -5774,15 +5784,15 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 31.75 62.23 90)
+		(at 29.21 87.63 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "77ede93b-25d2-4215-a68a-4b52486c1a3c")
-		(property "Reference" "R5"
-			(at 23.622 58.674 90)
+		(property "Reference" "R8"
+			(at 21.082 84.074 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5790,15 +5800,15 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 23.622 61.214 90)
+			(at 21.082 86.614 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
-			(at 32.004 61.214 90)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+			(at 29.464 86.614 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5807,7 +5817,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 31.75 62.23 0)
+			(at 29.21 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5816,7 +5826,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 31.75 62.23 0)
+			(at 29.21 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5833,7 +5843,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "R5")
+					(reference "R8")
 					(unit 1)
 				)
 			)
@@ -5849,7 +5859,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7bf3d3ee-bfb2-449f-96e6-5aea1664c218")
-		(property "Reference" "R2"
+		(property "Reference" "R1"
 			(at 226.06 80.0099 0)
 			(effects
 				(font
@@ -5867,7 +5877,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 222.504 81.026 90)
 			(effects
 				(font
@@ -5903,7 +5913,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "R2")
+					(reference "R1")
 					(unit 1)
 				)
 			)
@@ -5919,7 +5929,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "82257996-fb04-41a6-9b70-cf3eb8bf255d")
-		(property "Reference" "C9"
+		(property "Reference" "C7"
 			(at 121.92 30.2259 0)
 			(effects
 				(font
@@ -5937,7 +5947,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Rect_L4.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm"
 			(at 118.11 31.75 0)
 			(effects
 				(font
@@ -5973,7 +5983,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "C9")
+					(reference "C7")
 					(unit 1)
 				)
 			)
@@ -5988,7 +5998,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "82319f0d-9132-4e30-8934-f680dcc35a6b")
-		(property "Reference" "R4"
+		(property "Reference" "R7"
 			(at 51.562 55.626 90)
 			(effects
 				(font
@@ -6004,7 +6014,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 32.004 56.134 90)
 			(effects
 				(font
@@ -6040,7 +6050,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "R4")
+					(reference "R7")
 					(unit 1)
 				)
 			)
@@ -6065,7 +6075,7 @@
 				)
 			)
 		)
-		(property "Value" "Bourns PEC11R"
+		(property "Value" "Rotary Encoder"
 			(at 95.25 157.4098 0)
 			(effects
 				(font
@@ -6158,7 +6168,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 106.426 59.944 90)
 			(effects
 				(font
@@ -6209,7 +6219,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a0e72fd0-2d6e-4ee8-bc82-b0099135317a")
-		(property "Reference" "R1"
+		(property "Reference" "R3"
 			(at 181.864 71.628 0)
 			(effects
 				(font
@@ -6227,7 +6237,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 178.054 70.866 90)
 			(effects
 				(font
@@ -6263,7 +6273,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "R1")
+					(reference "R3")
 					(unit 1)
 				)
 			)
@@ -6297,7 +6307,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 93.726 59.944 90)
 			(effects
 				(font
@@ -6349,7 +6359,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a63b8fdf-0052-4f23-aa9f-3473ae44be6d")
-		(property "Reference" "C5"
+		(property "Reference" "C4"
 			(at 183.134 59.69 90)
 			(effects
 				(font
@@ -6365,7 +6375,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Rect_L4.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 			(at 182.88 67.31 0)
 			(effects
 				(font
@@ -6401,7 +6411,7 @@
 		(instances
 			(project "Radio"
 				(path "/6b6c9202-faf0-4225-a4eb-fb570b58e246"
-					(reference "C5")
+					(reference "C4")
 					(unit 1)
 				)
 			)
@@ -6435,7 +6445,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 138.43 72.39 0)
 			(effects
 				(font
@@ -6594,7 +6604,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Rect_L4.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 			(at 168.91 24.13 0)
 			(effects
 				(font
@@ -6664,7 +6674,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Rect_L4.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 			(at 99.06 31.75 0)
 			(effects
 				(font
@@ -6885,7 +6895,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Module:RaspberryPi_Pico_W_SMD_HandSolder"
+		(property "Footprint" "ECE:RPi_Pico_TH"
 			(at 58.42 114.3 0)
 			(effects
 				(font

@@ -1,6 +1,11 @@
-from machine import Pin, I2C
+from machine import Pin, I2C, SPI
 import time
 from rotary_irq_rp2 import RotaryIRQ
+
+# The below specified libraries have to be included. Also, ssd1306.py must be saved on the Pico. 
+from ssd1306 import SSD1306_SPI # this is the driver library and the corresponding class
+import framebuf # this is another library for the display.
+import utime
 
 class Radio:
     
@@ -38,13 +43,12 @@ class Radio:
 #
         self.Settings = bytearray( 8 )
 
-
         self.radio_i2c = I2C( self.i2c_device, scl=self.i2c_scl, sda=self.i2c_sda, freq=200000)
         self.ProgramRadio()
 
     def SetVolume( self, NewVolume ):
 #
-# Conver t the string into a integer
+# Convert the string into a integer
 #
         try:
             NewVolume = int( NewVolume )
@@ -170,13 +174,13 @@ class Radio:
 #
 # initialize the FM radio
 #
-fm_radio = Radio( 101.9, 2, False )
+fm_radio = Radio( 107.3, 2, False )
 
-# Init Buttons
-button_sw1 = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_DOWN) #Rotary Encoder Switch 1
-button_sw2 = machine.Pin(3, machine.Pin.IN, machine.Pin.PULL_DOWN) #Rotary Encoder Switch 2
-button_sw3 = machine.Pin(6, machine.Pin.IN, machine.Pin.PULL_DOWN) #Switch 3
-button_sw4 = machine.Pin(7, machine.Pin.IN, machine.Pin.PULL_DOWN) #Switch 4
+# === Initialize Buttons ===
+button_sw1 = Pin(0, Pin.IN, Pin.PULL_DOWN)  # Rotary Encoder Switch 1
+button_sw2 = Pin(3, Pin.IN, Pin.PULL_DOWN)  # Rotary Encoder Switch 2
+button_sw3 = Pin(6, Pin.IN, Pin.PULL_DOWN)  # Switch 3
+button_sw4 = Pin(7, Pin.IN, Pin.PULL_DOWN)  # Switch 4
 
 #Rotary Encoders
 # Initialize the rotary encoder
@@ -184,15 +188,16 @@ button_sw4 = machine.Pin(7, machine.Pin.IN, machine.Pin.PULL_DOWN) #Switch 4
 # min_val, max_val: Set a range if needed, otherwise use RANGE_UNBOUNDED
 # reverse: Set to True if rotation direction is inverted
 
-# For volume control?
+# === Initialize Rotary Encoders ===
 rotary1 = RotaryIRQ(pin_num_dt=1, pin_num_clk=2,
-                min_val=0, max_val=100, reverse=False,
-                range_mode=RotaryIRQ.RANGE_WRAP) # or RotaryIRQ.RANGE_UNBOUNDED
+                    min_val=0, max_val=15, reverse=False,
+                    range_mode=RotaryIRQ.RANGE_WRAP,
+                    pull_up=True)
 
-# For frequency control?
 rotary2 = RotaryIRQ(pin_num_dt=4, pin_num_clk=5,
-            min_val=0, max_val=100, reverse=False,
-            range_mode=RotaryIRQ.RANGE_WRAP) # or RotaryIRQ.RANGE_UNBOUNDED
+                    min_val=0, max_val=15, reverse=False,
+                    range_mode=RotaryIRQ.RANGE_WRAP,
+                    pull_up=True)
 
 r1_old = rotary1.value()
 r2_old = rotary2.value()
@@ -200,6 +205,35 @@ r2_old = rotary2.value()
 # FSM for button checking
 prevButton = 0
 curButton = 0
+
+# Screen initialization
+# Define columns and rows of the oled display. These numbers are the standard values. 
+SCREEN_WIDTH = 128 #number of columns
+SCREEN_HEIGHT = 64 #number of rows
+
+
+# Initialize I/O pins associated with the oled display SPI interface
+
+spi_sck = Pin(18) # sck stands for serial clock; always be connected to SPI SCK pin of the Pico
+spi_sda = Pin(19) # sda stands for serial data;  always be connected to SPI TX pin of the Pico; this is the MOSI
+spi_res = Pin(21) # res stands for reset; to be connected to a free GPIO pin
+spi_dc  = Pin(20) # dc stands for data/command; to be connected to a free GPIO pin
+spi_cs  = Pin(17) # chip select; to be connected to the SPI chip select of the Pico 
+
+#
+# SPI Device ID can be 0 or 1. It must match the wiring. 
+#
+SPI_DEVICE = 0 # Because the peripheral is connected to SPI 0 hardware lines of the Pico
+
+#
+# initialize the SPI interface for the OLED display
+#
+oled_spi = SPI( SPI_DEVICE, baudrate= 100000, sck= spi_sck, mosi= spi_sda )
+
+#
+# Initialize the display
+#
+oled = SSD1306_SPI( SCREEN_WIDTH, SCREEN_HEIGHT, oled_spi, spi_dc, spi_res, spi_cs, True )
 
 while ( True ):
 
@@ -214,21 +248,8 @@ while ( True ):
     print( "3 - mute audio" )
     print( "4 - read current settings" )
     print( "5 - Rotate to change volume" )
-
-    new_r1 = rotary1.value()
-    new_r2 = rotary2.value()
-
-    if new_r1 != r1_old:
-        print(f"Rotary1 moved: {new_r1}")
-        r1_old = new_r1
-
-    if new_r2 != r2_old:
-        print(f"Rotary2 moved: {new_r2}")
-        r2_old = new_r2
     
     select = input( "Enter menu number > " )
-    
-
 
 #
 # Set radio frequency
@@ -245,13 +266,25 @@ while ( True ):
 # Set volume level of radio
 #
     elif ( select == "2" ):
-
-        Volume = input( "Enter volume level ( 0 to 15, 15 is loud ) > " )
+        print("Rotate rotary1 to change volume.")
+        print("Press Button SW1 (Pin 0) to return to menu.")
+        val_old = rotary1.value()
         
-        if ( fm_radio.SetVolume( Volume ) == True ):
-            fm_radio.ProgramRadio()
-        else:
-            print( "Invalid volume level( Range is 0 to 15 )" )
+        while True:
+            val_new = rotary1.value()
+            
+            if val_new != val_old:
+                val_old = val_new
+                print("Volume:", val_new)
+                if fm_radio.SetVolume(val_new):
+                    fm_radio.ProgramRadio()
+                time.sleep_ms(100)
+
+            # Check for button press to return to menu
+            if button_sw1.value() == 1:
+                print("Returning to menu...")
+                time.sleep(0.5)  # debounce delay
+                break
         
 #        
 # Enable mute of radio       
@@ -290,30 +323,7 @@ while ( True ):
             print( "stereo" )
         else:
             print( "mono" )
-            
-    elif select == "5":
-        print("Press CTRL+C to save your volume")
-        newVolume = 0
-
-        val_old = rotary1.value()
-
-        while (True):
-            try:
-                print("Rotate the knob to change volume. Press CTRL+C to save.")
-                while True:
-                    val_new = rotary1.value()
-
-                    if val_new != val_old:
-                        val_old = val_new
-                        print("Volume:", val_new)
-                        if fm_radio.SetVolume(val_new):
-                            fm_radio.ProgramRadio()
-
-                    time.sleep_ms(50)
-
-            except KeyboardInterrupt:
-                print("Volume saved as:", val_old)
-                input("Press Enter to return to menu...")
 
     else:
         print( "Invalid menu option" )
+

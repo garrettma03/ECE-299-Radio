@@ -1,11 +1,7 @@
-from machine import Pin, I2C, SPI
+from machine import Pin, I2C
 import time
 from rotary_irq_rp2 import RotaryIRQ
-
-# The below specified libraries have to be included. Also, ssd1306.py must be saved on the Pico. 
-from ssd1306 import SSD1306_SPI # this is the driver library and the corresponding class
-import framebuf # this is another library for the display.
-import utime
+from machine import RTC
 
 class Radio:
     
@@ -43,12 +39,13 @@ class Radio:
 #
         self.Settings = bytearray( 8 )
 
+
         self.radio_i2c = I2C( self.i2c_device, scl=self.i2c_scl, sda=self.i2c_sda, freq=200000)
         self.ProgramRadio()
 
     def SetVolume( self, NewVolume ):
 #
-# Convert the string into a integer
+# Conver t the string into a integer
 #
         try:
             NewVolume = int( NewVolume )
@@ -190,12 +187,13 @@ button_sw4 = Pin(7, Pin.IN, Pin.PULL_DOWN)  # Switch 4
 
 # === Initialize Rotary Encoders ===
 rotary1 = RotaryIRQ(pin_num_dt=1, pin_num_clk=2,
-                    min_val=0, max_val=15, reverse=False,
+                    min_val=88.0, max_val=16.0, reverse=False,
                     range_mode=RotaryIRQ.RANGE_WRAP,
                     pull_up=True)
 
+# Set up rotary2 for frequency selection: 0 to 99 steps (for 88.1 to 107.9)
 rotary2 = RotaryIRQ(pin_num_dt=4, pin_num_clk=5,
-                    min_val=0, max_val=15, reverse=False,
+                    min_val=88.1, max_val=108.1, reverse=False,
                     range_mode=RotaryIRQ.RANGE_WRAP,
                     pull_up=True)
 
@@ -206,66 +204,74 @@ r2_old = rotary2.value()
 prevButton = 0
 curButton = 0
 
-# Screen initialization
-# Define columns and rows of the oled display. These numbers are the standard values. 
-SCREEN_WIDTH = 128 #number of columns
-SCREEN_HEIGHT = 64 #number of rows
+# Time settings
+current_hour = 12
+current_minute = 0
+is_24_hour_format = True
 
+# Alarm variables
+alarm_hour = None
+alarm_minute = None
+alarm_enabled = False
+alarm_triggered = False
 
-# Initialize I/O pins associated with the oled display SPI interface
+rtc = RTC()
+# Set the RTC to your initial time (only once, or when user sets time)
+rtc.datetime((2025, 7, 17, 0, 12, 0, 0, 0))  # (year, month, day, weekday, hour, minute, second, microsecond)
 
-spi_sck = Pin(18) # sck stands for serial clock; always be connected to SPI SCK pin of the Pico
-spi_sda = Pin(19) # sda stands for serial data;  always be connected to SPI TX pin of the Pico; this is the MOSI
-spi_res = Pin(21) # res stands for reset; to be connected to a free GPIO pin
-spi_dc  = Pin(20) # dc stands for data/command; to be connected to a free GPIO pin
-spi_cs  = Pin(17) # chip select; to be connected to the SPI chip select of the Pico 
+while True:
+    # Get current time from RTC
+    now = rtc.datetime()
+    current_hour = now[4]
+    current_minute = now[5]
+    current_second = now[6]
 
-#
-# SPI Device ID can be 0 or 1. It must match the wiring. 
-#
-SPI_DEVICE = 0 # Because the peripheral is connected to SPI 0 hardware lines of the Pico
+    # Print the current time
+    print("Current time: %02d:%02d:%02d" % (current_hour, current_minute, current_second))
 
-#
-# initialize the SPI interface for the OLED display
-#
-oled_spi = SPI( SPI_DEVICE, baudrate= 100000, sck= spi_sck, mosi= spi_sda )
-
-#
-# Initialize the display
-#
-oled = SSD1306_SPI( SCREEN_WIDTH, SCREEN_HEIGHT, oled_spi, spi_dc, spi_res, spi_cs, True )
-
-while ( True ):
-
-#
-# display the menu
-#
     print("")
-    print( "ECE 299 FM Radio Demo Menu" )
+    print("ECE 299 FM Radio Demo Menu")
     print("")
-    print( "1 - change radio frequency" )
-    print( "2 - change volume level" )
-    print( "3 - mute audio" )
-    print( "4 - read current settings" )
-    print( "5 - Rotate to change volume" )
-    
-    select = input( "Enter menu number > " )
+    print("Press SW1 for: change radio frequency")
+    print("Press SW2 for: change volume level")
+    print("Press SW3 for: set time and format")
+    print("Press SW4 for: set alarm")
+    print("")
 
-#
-# Set radio frequency
-#
-    if ( select == "1" ):
-        Frequency = input( "Enter frequncy in Mhz ( IE 100.3 ) > " )
-
-        if ( fm_radio.SetFrequency( Frequency ) == True ):
+    # Alarm check (add this at the end of your main loop)
+    if alarm_enabled and not alarm_triggered:
+        if current_hour == alarm_hour and current_minute == alarm_minute:
+            print("Alarm! Turning radio on at max volume.")
+            fm_radio.SetMute(False)
+            fm_radio.SetVolume(15)
             fm_radio.ProgramRadio()
-        else:
-            print( "Invalid frequency( Range is 88.0 to 108.0 )" )
+            alarm_triggered = True  # Prevent retriggering
+
+    # Wait for a button press
+    while True:
+        if button_sw1.value() == 1:
+            select = "1"
+            break
+        elif button_sw2.value() == 1:
+            select = "2"
+            break
+        elif button_sw3.value() == 1:
+            select = "3"
+            break
+        elif button_sw4.value() == 1:
+            select = "4"
+            break
+        time.sleep(0.05)  # debounce and avoid busy-wait
+
+    # Debounce: wait for button release
+    while (button_sw1.value() == 1 or button_sw2.value() == 1 or
+           button_sw3.value() == 1 or button_sw4.value() == 1):
+        time.sleep(0.05)
 
 #
 # Set volume level of radio
 #
-    elif ( select == "2" ):
+    if ( select == "1" ):
         print("Rotate rotary1 to change volume.")
         print("Press Button SW1 (Pin 0) to return to menu.")
         val_old = rotary1.value()
@@ -285,45 +291,191 @@ while ( True ):
                 print("Returning to menu...")
                 time.sleep(0.5)  # debounce delay
                 break
-        
+
+#
+# Set radio frequency
+#
+    elif ( select == "2" ):
+        print("Rotate rotary1 to change frequency (88.1 - 107.9 MHz, odd tenths only).")
+        print("Press Button SW2 (Pin 3) to return to menu.")
+        val_old = rotary2.value()
+        freq_old = max(88.0, min(108.0, 88.1 + val_old * 0.2))
+        fm_radio.SetFrequency(freq_old)
+        fm_radio.ProgramRadio()
+        print("Frequency:", "%.1f" % freq_old)
+
+        while True:
+            val_new = rotary2.value()
+            if val_new != val_old:
+                val_old = val_new
+                freq_new = 88.1 + val_new * 0.2
+                print("Frequency:", "%.1f" % freq_new)
+                if fm_radio.SetFrequency(freq_new):
+                    fm_radio.ProgramRadio()
+                time.sleep_ms(100)
+
+            # Check for button press to return to menu
+            if button_sw2.value() == 1:
+                print("Returning to menu...")
+                time.sleep(0.5)  # debounce delay
+                break
 #        
-# Enable mute of radio       
+# Set time and change between 12hr/24hr time     
 #        
     elif( select == "3" ):
-        Mute = input( "Enter mute ( 1 for Mute, 0 for audio ) > " )
-        
-        if ( fm_radio.SetMute( Mute ) == True ):
-            fm_radio.ProgramRadio()
+        print("Set Time Mode")
+        print("Rotary1: Set hour")
+        print("Rotary2: Set minute")
+        print("Press SW3 to confirm and return to menu.")
+        print("Press SW4 to toggle 12/24 hour format.")
+
+        am_pm = "AM"
+        if not is_24_hour_format and current_hour >= 12:
+            am_pm = "PM"
+
+        # Set hour limits depending on format
+        if is_24_hour_format:
+            rotary1.set(min_val=0, max_val=23, value=current_hour)
         else:
-            print( "Invalid mute setting" )
+            # 12-hour mode: 1-12, track AM/PM
+            hour_12 = current_hour % 12
+            if hour_12 == 0:
+                hour_12 = 12
+            rotary1.set(min_val=1, max_val=12, value=hour_12)
+            am_pm = "AM" if current_hour < 12 else "PM"
+
+        rotary2.set(min_val=0, max_val=59, value=current_minute)
+
+        hour = rotary1.value()
+        minute = rotary2.value()
+        am_pm_state = am_pm
+
+        def print_time(hour, minute, is_24, am_pm):
+            if is_24:
+                print("Hour: %02d, Minute: %02d (24h)" % (hour, minute))
+            else:
+                print("Hour: %02d, Minute: %02d %s (12h)" % (hour, minute, am_pm))
+
+        print_time(hour, minute, is_24_hour_format, am_pm_state)
+
+        while True:
+            new_hour = rotary1.value()
+            new_minute = rotary2.value()
+
+            # Toggle 12/24 hour format with SW4
+            if button_sw4.value() == 1:
+                is_24_hour_format = not is_24_hour_format
+                if is_24_hour_format:
+                    # Convert to 24-hour
+                    if am_pm_state == "PM" and hour != 12:
+                        current_hour = hour + 12
+                    elif am_pm_state == "AM" and hour == 12:
+                        current_hour = 0
+                    else:
+                        current_hour = hour
+                    rotary1.set(min_val=0, max_val=23, value=current_hour)
+                else:
+                    # Convert to 12-hour
+                    if current_hour == 0:
+                        hour_12 = 12
+                        am_pm_state = "AM"
+                    elif current_hour > 12:
+                        hour_12 = current_hour - 12
+                        am_pm_state = "PM"
+                    elif current_hour == 12:
+                        hour_12 = 12
+                        am_pm_state = "PM"
+                    else:
+                        hour_12 = current_hour
+                        am_pm_state = "AM"
+                    rotary1.set(min_val=1, max_val=12, value=hour_12)
+                hour = rotary1.value()
+                print("Toggled time format.")
+                print_time(hour, minute, is_24_hour_format, am_pm_state)
+                time.sleep(0.5)  # debounce
+
+            # Toggle AM/PM in 12-hour mode with SW1
+            if not is_24_hour_format and button_sw1.value() == 1:
+                am_pm_state = "PM" if am_pm_state == "AM" else "AM"
+                print_time(hour, minute, is_24_hour_format, am_pm_state)
+                time.sleep(0.5)  # debounce
+
+            if new_hour != hour or new_minute != minute:
+                hour = new_hour
+                minute = new_minute
+                print_time(hour, minute, is_24_hour_format, am_pm_state)
+                time.sleep_ms(100)
+
+            if button_sw3.value() == 1:
+                # Save time
+                if is_24_hour_format:
+                    set_hour = hour
+                else:
+                    # Convert 12h to 24h
+                    if am_pm_state == "AM":
+                        set_hour = hour if hour != 12 else 0
+                    else:
+                        set_hour = hour if hour == 12 else hour + 12
+                set_minute = minute
+
+                # Get current date to preserve it
+                y, m, d, wd, _, _, _, _ = rtc.datetime()
+                rtc.datetime((y, m, d, wd, set_hour, set_minute, 0, 0))
+                print("Time set to %02d:%02d %s" % (
+                    hour if not is_24_hour_format else set_hour,
+                    set_minute,
+                    "" if is_24_hour_format else am_pm_state
+                ))
+                time.sleep(0.5)
+                break
+
+        # Restore rotary1 and rotary2 to original volume/freq range
+        rotary1.set(min_val=0, max_val=15)
+        rotary2.set(min_val=0, max_val=99)
 
 #
 # Display radio current settings
 #
     elif( select == "4" ):
-        Settings = fm_radio.GetSettings()
+        print("Set Alarm Mode")
+        print("Rotary1: Set alarm hour")
+        print("Rotary2: Set alarm minute")
+        print("Press SW4 to confirm and return to menu.")
 
-        print( Settings )
-        print("")
-        print("Radio Status")
-        print("")
+        # Set up rotary ranges for alarm setting
+        rotary1.set(min_val=0, max_val=23, value=current_hour)
+        rotary2.set(min_val=0, max_val=59, value=current_minute)
 
-        print( "Mute: ", end="" )
-        if ( Settings[0] == True ):
-            print( "enabled" )
-        else:
-            print( "disabled" )
+        alarm_set_hour = rotary1.value()
+        alarm_set_minute = rotary2.value()
 
-        print( "Volume: %d" % Settings[1] )
+        def print_alarm_time(hour, minute):
+            print("Alarm set for %02d:%02d" % (hour, minute))
 
-        print( "Frequency: %5.1f" % Settings[2] )
+        print_alarm_time(alarm_set_hour, alarm_set_minute)
 
-        print( "Mode: ", end="" )
-        if ( Settings[3] == True ):
-            print( "stereo" )
-        else:
-            print( "mono" )
+        while True:
+            new_alarm_hour = rotary1.value()
+            new_alarm_minute = rotary2.value()
+            if new_alarm_hour != alarm_set_hour or new_alarm_minute != alarm_set_minute:
+                alarm_set_hour = new_alarm_hour
+                alarm_set_minute = new_alarm_minute
+                print_alarm_time(alarm_set_hour, alarm_set_minute)
+                time.sleep_ms(100)
+
+            # Confirm alarm with SW4
+            if button_sw4.value() == 1:
+                alarm_hour = alarm_set_hour
+                alarm_minute = alarm_set_minute
+                alarm_enabled = True
+                alarm_triggered = False
+                print("Alarm set for %02d:%02d" % (alarm_hour, alarm_minute))
+                time.sleep(0.5)
+                break
+
+        # Restore rotary1 and rotary2 to original volume/freq range
+        rotary1.set(min_val=0, max_val=15)
+        rotary2.set(min_val=0, max_val=99)
 
     else:
         print( "Invalid menu option" )
-

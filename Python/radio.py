@@ -240,73 +240,82 @@ SPI_DEVICE = 0
 oled_spi = SPI(SPI_DEVICE, baudrate=100000, sck=spi_sck, mosi=spi_sda)
 oled = SSD1306_SPI(SCREEN_WIDTH, SCREEN_HEIGHT, oled_spi, spi_dc, spi_res, spi_cs, True)
 
-while True:
-    # Get current time from RTC
-    now = rtc.datetime()
-    current_hour = now[4]
-    current_minute = now[5]
-    current_second = now[6]
+last_tick = time.ticks_ms()
 
-    # Print the current time
-    print("Current time: %02d:%02d:%02d" % (current_hour, current_minute, current_second))
-    
-    # Format time
-    time_str = "%02d:%02d:%02d" % (current_hour, current_minute, current_second)
+while True:  # <-- Add this outer loop
+    last_tick = time.ticks_ms()
+    select = None
 
-    # Clear the display before drawing new text
-    oled.fill(0)
-    oled.text("ECE 299 Clock", 10, 0)
-    oled.text("Time:", 10, 20)
-    oled.text(time_str, 10, 35)
-    oled.rect(0, 50, 128, 5, 1)
-    oled.show()
-
-    # Wait 0.5s to reduce flicker and CPU use
-    time.sleep(0.5)
-
-    print("")
-    print("ECE 299 FM Radio Demo Menu")
-    print("")
-    print("Press SW1 for: change volume level")
-    print("Press SW2 for: change between 12/24hr time")
-    print("Press SW3 for: set alarm")
-    print("Press SW4 for: change radio frequency")
-    print("")
-
-    # Alarm check (add this at the end of your main loop)
-    if alarm_enabled and not alarm_triggered:
-        if current_hour == alarm_hour and current_minute == alarm_minute:
-            print("Alarm! Turning radio on at max volume.")
-            fm_radio.SetMute(False)
-            fm_radio.SetVolume(15)
-            fm_radio.ProgramRadio()
-            alarm_triggered = True  # Prevent retriggering
-
-    # Wait for a button press
+    # --- Main menu display and button wait ---
     while True:
-        if button_sw1.value() == 1:
+        # === 1. Update time display every second ===
+        if time.ticks_diff(time.ticks_ms(), last_tick) >= 1000:
+            now = rtc.datetime()
+            current_hour = now[4]
+            current_minute = now[5]
+            current_second = now[6]
+
+            # --- Format time string based on 12/24hr setting ---
+            if is_24_hour_format:
+                time_str = "%02d:%02d:%02d" % (current_hour, current_minute, current_second)
+            else:
+                hour_12 = current_hour % 12
+                if hour_12 == 0:
+                    hour_12 = 12
+                am_pm_display = "AM" if current_hour < 12 else "PM"
+                time_str = "%02d:%02d:%02d %s" % (hour_12, current_minute, current_second, am_pm_display)
+
+            oled.fill(0)
+            oled.text("ECE 299 Clock", 10, 0)
+            oled.text("Time:", 10, 20)
+            oled.text(time_str, 10, 35)
+            oled.rect(0, 50, 128, 5, 1)
+            oled.show()
+
+            print("Current time:", time_str)
+            print("")
+            print("ECE 299 FM Radio Demo Menu")
+            print("Press SW1 for: change volume level")
+            print("Press SW2 for: change between 12/24hr time")
+            print("Press SW3 for: set alarm")
+            print("Press SW4 for: change radio frequency")
+            print("")
+
+            # Alarm trigger check
+            if alarm_enabled and not alarm_triggered:
+                if current_hour == alarm_hour and current_minute == alarm_minute:
+                    print("Alarm! Turning radio on at max volume.")
+                    fm_radio.SetMute(False)
+                    fm_radio.SetVolume(15)
+                    fm_radio.ProgramRadio()
+                    alarm_triggered = True
+
+            last_tick = time.ticks_ms()
+
+        if button_sw1.value():
             select = "1"
             break
-        elif button_sw2.value() == 1:
+        elif button_sw2.value():
             select = "2"
             break
-        elif button_sw3.value() == 1:
+        elif button_sw3.value():
             select = "3"
             break
-        elif button_sw4.value() == 1:
+        elif button_sw4.value():
             select = "4"
             break
-        time.sleep(0.05)  # debounce and avoid busy-wait
+        time.sleep_ms(50)
 
     # Debounce: wait for button release
     while (button_sw1.value() == 1 or button_sw2.value() == 1 or
            button_sw3.value() == 1 or button_sw4.value() == 1):
         time.sleep(0.05)
 
+    # --- Menu selection handling ---
+    if select == "1":
 #
 # Set volume level of radio
 #
-    if ( select == "1" ):
         print("Rotate rotary1 to change volume.")
         print("Press Button SW1 (Pin 0) to return to menu.")
         val_old = rotary1.value()
@@ -321,6 +330,14 @@ while True:
                     fm_radio.ProgramRadio()
                 time.sleep_ms(100)
 
+            # --- OLED live update for volume ---
+            oled.fill(0)
+            oled.text("Set Volume", 10, 0)
+            oled.text("Volume: %d" % val_old, 10, 20)
+            oled.text("SW1: Confirm", 10, 40)
+            oled.show()
+            # -----------------------------------
+
             # Check for button press to return to menu
             if button_sw1.value() == 1:
                 print("Returning to menu...")
@@ -333,7 +350,7 @@ while True:
     elif( select == "2" ):
         print("Set Time Mode")
         print("Rotary1: Set hour")
-        print("Rotary2: Set minute")
+        print("Rotary2: Set alarm minute")
         print("Press SW2 to confirm and return to menu.")
         print("Press SW3 to toggle 12/24 hour format.")
 
@@ -370,8 +387,45 @@ while True:
             new_hour = rotary1.value()
             new_minute = rotary2.value()
 
-            # Toggle 12/24 hour format with SW4
-            if button_sw4.value() == 1:
+            # Update time if changed
+            if new_hour != hour or new_minute != minute:
+                hour = new_hour
+                minute = new_minute
+
+                # --- Automatically update AM/PM in 12-hour mode ---
+                if not is_24_hour_format:
+                    # If hour is 12, AM/PM depends on previous state and minute rollover
+                    if hour == 12:
+                        if am_pm_state == "AM" and new_minute < minute:
+                            am_pm_state = "PM"
+                        elif am_pm_state == "PM" and new_minute < minute:
+                            am_pm_state = "AM"
+                    else:
+                        # For hours 1-11, AM/PM stays the same unless you want to add more logic
+                        pass
+                # -------------------------------------------------
+
+                print_time(hour, minute, is_24_hour_format, am_pm_state)
+                time.sleep_ms(100)
+
+            # --- OLED live update for time setting ---
+            oled.fill(0)
+            oled.text("Set Time", 10, 0)
+            if is_24_hour_format:
+                oled.text("Time: %02d:%02d" % (hour, minute), 10, 20)
+            else:
+                # Calculate AM/PM for display
+                display_hour = hour
+                display_am_pm = am_pm_state
+                oled.text("Time: %02d:%02d %s" % (display_hour, minute, display_am_pm), 10, 20)
+            oled.text("SW2: Save", 10, 30)
+            oled.text("SW3: 12/24hr", 10, 40)
+            oled.text("SW4: AM/PM", 10, 50)
+            oled.show()
+            # -----------------------------------------
+
+            # Toggle 12/24 hour format with SW3
+            if button_sw3.value() == 1:
                 is_24_hour_format = not is_24_hour_format
                 if is_24_hour_format:
                     # Convert to 24-hour
@@ -402,19 +456,13 @@ while True:
                 print_time(hour, minute, is_24_hour_format, am_pm_state)
                 time.sleep(0.5)  # debounce
 
-            # Toggle AM/PM in 12-hour mode with SW1
-            if not is_24_hour_format and button_sw3.value() == 1:
+            # --- AM/PM toggle in 12-hour mode ---
+            if not is_24_hour_format and button_sw4.value() == 1:
                 am_pm_state = "PM" if am_pm_state == "AM" else "AM"
                 print_time(hour, minute, is_24_hour_format, am_pm_state)
                 time.sleep(0.5)  # debounce
 
-            if new_hour != hour or new_minute != minute:
-                hour = new_hour
-                minute = new_minute
-                print_time(hour, minute, is_24_hour_format, am_pm_state)
-                time.sleep_ms(100)
-
-            if button_sw3.value() == 1:
+            if button_sw2.value() == 1:
                 # Save time
                 if is_24_hour_format:
                     set_hour = hour
@@ -437,10 +485,10 @@ while True:
                 time.sleep(0.5)
                 break
 
+
         # Restore rotary1 and rotary2 to original volume/freq range
         rotary1.set(min_val=0, max_val=15)
         rotary2.set(min_val=0, max_val=99)
-
 #
 # Set alarm
 #
@@ -493,7 +541,7 @@ while True:
         # Restore rotary1 and rotary2 to original volume/freq range
         rotary1.set(min_val=0, max_val=15)
         rotary2.set(min_val=0, max_val=99)
-        
+    
 #
 # Set radio frequency
 #
@@ -516,6 +564,14 @@ while True:
                     fm_radio.ProgramRadio()
                 time.sleep_ms(100)
 
+            # --- OLED live update for frequency ---
+            oled.fill(0)
+            oled.text("Set Frequency", 10, 0)
+            oled.text("Freq: %.1f MHz" % (88.1 + val_old * 0.2), 10, 20)
+            oled.text("SW4: Confirm", 10, 40)
+            oled.show()
+            # --------------------------------------
+
             # Check for button press to return to menu
             if button_sw4.value() == 1:
                 print("Returning to menu...")
@@ -525,3 +581,6 @@ while True:
 
     else:
         print( "Invalid menu option" )
+
+
+

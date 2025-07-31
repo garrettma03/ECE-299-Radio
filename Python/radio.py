@@ -251,9 +251,9 @@ class Radio:
 #
 # initialize the FM radio
 #
-fm_radio = Radio( 107.3, 2, False )
+fm_radio = Radio( 101.9, 2, False )
 
-# === Initialize Buttons ===
+# Initialize Buttons
 button_sw1 = Pin(0, Pin.IN, Pin.PULL_DOWN)  # Rotary Encoder Switch 1
 button_sw2 = Pin(3, Pin.IN, Pin.PULL_DOWN)  # Left Button
 button_sw3 = Pin(7, Pin.IN, Pin.PULL_DOWN)  # Right Button
@@ -265,7 +265,7 @@ button_sw4 = Pin(13, Pin.IN, Pin.PULL_DOWN)  # Rotary Encoder Switch 2
 # min_val, max_val: Set a range if needed, otherwise use RANGE_UNBOUNDED
 # reverse: Set to True if rotation direction is inverted
 
-# === Initialize Rotary Encoders ===
+# Initialize Rotary Encoders
 rotary1 = RotaryIRQ(pin_num_dt=1, pin_num_clk=2,
                     min_val=0, max_val=15.0, reverse=False,
                     range_mode=RotaryIRQ.RANGE_WRAP,
@@ -320,14 +320,14 @@ oled_spi = SPI(SPI_DEVICE, baudrate=100000, sck=spi_sck, mosi=spi_sda)
 oled = SSD1306_SPI(SCREEN_WIDTH, SCREEN_HEIGHT, oled_spi, spi_dc, spi_res, spi_cs, True)
 
 last_tick = time.ticks_ms()
-last_menu_print = time.ticks_ms()  # Add this line
+last_menu_print = time.ticks_ms()
 
 last_station_name = ""
 last_freq = fm_radio.Frequency
 
 scroll_index = 0
 scroll_last_update = time.ticks_ms()
-SCROLL_INTERVAL = 250  # ms between scroll steps (adjust for speed)
+SCROLL_INTERVAL = 250
 
 while True:
     last_tick = time.ticks_ms()
@@ -365,7 +365,6 @@ while True:
                 scroll_index = 0
                 scroll_last_update = time.ticks_ms()
 
-
             # If frequency changed, clear PS buffer and update last_freq
             if fm_radio.Frequency != last_freq:
                 if hasattr(fm_radio, "rds_station_buf"):
@@ -385,8 +384,8 @@ while True:
             oled.text(time_str, 0, 0)  # Line 1: Time at the top
             oled.text("%.1f MHz" % fm_radio.Frequency, 0, 16) # Line 2: Frequency display
 
-            # --- RDS RadioText scrolling display (Line 3) ---
-            display_width = 16  # Number of characters that fit on the OLED line (adjust if needed)
+            # RDS RadioText scrolling display (Line 3)
+            display_width = 16
             if 'song_title' not in locals():
                 song_title = ""
             if len(song_title) > display_width:
@@ -398,15 +397,16 @@ while True:
                 scroll_text = song_title
                 scroll_index = 0
                 scroll_last_update = time.ticks_ms()
-            oled.text(scroll_text, 0, 32)  # Line 3: RDS RadioText (scrolling)
+            oled.text(scroll_text, 0, 32)  # Line 3: RDS RadioText
 
             oled.text("Vol:%d" % fm_radio.Volume, 0, 50)   # Volume in corner
             oled.show()
 
             last_tick = time.ticks_ms()
 
-        # === 2. Print menu to console once per second ===
+        # Print menu to console once per second
         if time.ticks_diff(time.ticks_ms(), last_menu_print) >= 1000:
+            # If the time string is set, print it
             print("Current time:", time_str if 'time_str' in locals() else "Loading...")
             print("")
             print("ECE 299 FM Radio Demo Menu")
@@ -415,7 +415,7 @@ while True:
             print("Press SW3 for: set alarm")
             print("Press SW4 for: change radio frequency")
             print("")
-            # --- Print RDS info to console ---
+            # Print RDS info to console
             print("RDS Station Name:", last_station_name if last_station_name else "(none)")
             print("RDS RadioText:", song_title if 'song_title' in locals() and song_title else "(none)")
 
@@ -446,7 +446,7 @@ while True:
                     fm_radio.ProgramRadio()
                     alarm_triggered = True
 
-                    # --- OLED alarm display and snooze/cancel handling ---
+                    # OLED alarm display and snooze/cancel handling
                     alarm_active = True
                     while alarm_active:
                         oled.fill(0)
@@ -458,7 +458,7 @@ while True:
                         # Snooze (SW4)
                         if button_sw4.value():
                             print("Alarm snoozed for 30 seconds.")
-                            alarm_snoozed_until = time.time() + 30
+                            alarm_snoozed_until = time.time() + 15
                             alarm_active = False
                             alarm_triggered = False  # Allow retrigger after snooze
                             time.sleep(0.5)  # debounce
@@ -506,11 +506,11 @@ while True:
            button_sw3.value() == 1 or button_sw4.value() == 1):
         time.sleep(0.05)
 
-    # --- Menu selection handling ---
-    if select == "1":
 #
 # Set volume level of radio
 #
+    # Menu selection handling
+    if select == "1":
         print("Rotate rotary1 to change volume.")
         print("Press Button SW1 (Pin 0) to confirm and return to menu.")
         val_old = rotary1.value()
@@ -527,10 +527,11 @@ while True:
             # OLED live update for volume
             oled.fill(0)
             oled.text("Set Volume", 10, 0)
-            oled.text("Volume: %d" % val_old, 10, 20)
+            oled.text("Volume: %d" % val_old, 10, 10)
             if val_old == 0:
-                oled.text("(Muted)", 10, 35)
-            oled.text("SW1: Confirm", 10, 50)
+                oled.text("(Muted)", 10, 25)
+            oled.text("SW1: Confirm", 10, 40)
+            oled.text("SW4: Cancel", 10, 50)
             oled.show()
 
             # Only program the radio when button is pressed
@@ -548,6 +549,12 @@ while True:
                 else:
                     print("Error setting volume")
                 
+                time.sleep(0.5)  # debounce delay
+                break
+
+            # Cancel and return to menu when SW4 is pressed
+            if button_sw4.value() == 1:
+                print("Volume selection cancelled. Returning to menu...")
                 time.sleep(0.5)  # debounce delay
                 break
             
@@ -610,12 +617,13 @@ while True:
             oled.fill(0)
             oled.text("Set Time", 10, 0)
             if is_24_hour_format:
-                oled.text("Time: %02d:%02d" % (hour, minute), 10, 20)
+                oled.text("Time: %02d:%02d" % (hour, minute), 10, 10)
             else:
                 # Concatenate time for display
                 display_hour = hour
                 display_am_pm = am_pm_state
-                oled.text("Time: %02d:%02d %s" % (display_hour, minute, display_am_pm), 10, 20)
+                oled.text("Time: %02d:%02d %s" % (display_hour, minute, display_am_pm), 10, 10)
+            oled.text("SW1: Cancel", 10, 20)
             oled.text("SW2: Save", 10, 30)
             oled.text("SW3: 12/24hr", 10, 40)
             oled.text("SW4: AM/PM", 10, 50)
@@ -651,6 +659,12 @@ while True:
                 hour = rotary1.value()
                 print("Toggled time format.")
                 time.sleep(0.5)  # debounce
+
+            # Cancel and return to menu when SW1 is pressed
+            if button_sw1.value() == 1:
+                print("Frequency selection cancelled. Returning to menu...")
+                time.sleep(0.5)  # debounce delay
+                break
 
             # AM/PM toggle in 12-hour mode
             if not is_24_hour_format and button_sw4.value() == 1:
@@ -711,6 +725,7 @@ while True:
         alarm_set_hour = rotary1.value()
         alarm_set_minute = rotary2.value()
 
+        # Update alarm values
         while True:
             new_alarm_hour = rotary1.value()
             new_alarm_minute = rotary2.value()
@@ -726,8 +741,9 @@ while True:
                 alarm_str = "Alarm: %02d:%02d" % (alarm_set_hour, alarm_set_minute)
             else:
                 alarm_str = "Alarm: %02d:%02d %s" % (alarm_set_hour, alarm_set_minute, am_pm_state)
-            oled.text(alarm_str, 10, 20)
-            oled.text("SW4: Confirm", 10, 40)
+            oled.text(alarm_str, 10, 10)
+            oled.text("SW4: Confirm", 10, 30)
+            oled.text("SW1: Cancel", 10, 40)
             if not is_24_hour_format:
                 oled.text("SW3: AM/PM", 10, 50)
             oled.show()
@@ -756,6 +772,12 @@ while True:
                                                         "" if is_24_hour_format else " " + am_pm_state
                 ))
                 time.sleep(0.5)
+                break
+
+            # Cancel and return to menu when SW4 is pressed
+            if button_sw1.value() == 1:
+                print("Volume selection cancelled. Returning to menu...")
+                time.sleep(0.5)  # debounce delay
                 break
 
         # Restore rotary1 and rotary2 to original volume/freq range
@@ -787,6 +809,7 @@ while True:
             oled.text("Set Frequency", 10, 0)
             oled.text("Freq: %.1f MHz" % (88.1 + val_old * 0.2), 10, 20)
             oled.text("SW4: Confirm", 10, 40)
+            oled.text("SW1: Cancel", 10, 50)
             oled.show()
 
             # Program when SW4 is pressed
@@ -801,8 +824,15 @@ while True:
                 
                 time.sleep(0.5)  # debounce delay
                 break
+
+            # Cancel and return to menu when SW1 is pressed
+            if button_sw1.value() == 1:
+                print("Frequency selection cancelled. Returning to menu...")
+                time.sleep(0.5)  # debounce delay
+                break
             
             time.sleep_ms(50)  # Main loop delay
 
     else:
         print( "Invalid menu option" )
+

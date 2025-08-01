@@ -167,8 +167,9 @@ class Radio:
         
         return( MuteStatus, VolumeStatus, FrequencyStatus, StereoStatus )
 
+    #Try and pull the RDS data from the radio (Station name and song title)
     def GetRDS(self):
-         #Try and pull the RDS data from the radio
+         
         try:
             # Starting at 0x0A read all bits until 0x3A
             raw_data = self.radio_i2c.readfrom(self.i2c_device_address, 32)
@@ -486,7 +487,7 @@ while True:
                 last_freq = fm_radio.Frequency
                 station_name = ""
 
-
+        # Check for button presses
         if button_sw1.value():
             select = "1"
             break
